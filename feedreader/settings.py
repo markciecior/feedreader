@@ -27,7 +27,7 @@ SECRET_KEY = config.SECRET_KEY
 DEBUG = config.DEBUG
 
 CRONJOBS = [
-    ('*/1 * * * *', 'myapp.views.index')
+    ('*/5 * * * *', 'myapp.views.output')
 ]
 
 
