@@ -13,7 +13,7 @@ ROOM_ID = config.ROOM_ID
 
 api = CiscoSparkAPI(access_token=SENDER_ID)
 
-def output(request):
+def output():
   myFeeds = Feed.objects.all()
   for feed in myFeeds:
     URL = feed.linkFile
