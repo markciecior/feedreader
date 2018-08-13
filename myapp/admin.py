@@ -14,5 +14,7 @@ class FeedAdmin(admin.ModelAdmin):
   list_display = ('description', 'active', 'linkFile')
   inlines = [LinkInline]
 
+admin.site.site_header = 'CAIT FeedReader Admin'
+admin.site.site_title = 'CAIT FeedReader API'
 admin.site.register(Feed, FeedAdmin)
 admin.site.register(Link, LinkAdmin)
