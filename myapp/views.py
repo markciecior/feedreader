@@ -5,8 +5,17 @@ from ciscosparkapi import CiscoSparkAPI
 import feedparser
 import config
 import hashlib
+import logging
 
 from .models import Feed, Link
+
+LOG_LEVEL = config.LOG_LEVEL
+LOG_FILE = config.LOG_FILE
+logging.basicConfig(
+    filename=LOG_FILE,
+    level=LOG_LEVEL,
+    format="%(asctime)s:%(levelname)s:%(message)s"
+    )
 
 SENDER_ID = config.SENDER_ID
 ROOM_ID = config.ROOM_ID
@@ -14,20 +23,22 @@ ROOM_ID = config.ROOM_ID
 api = CiscoSparkAPI(access_token=SENDER_ID)
 
 def output():
+  logging.debug('Looking through feeds...')
   myFeeds = Feed.objects.all()
+  logging.debug('Found ' + str(myFeeds.count()) + ' feeds...')
   for feed in myFeeds:
     URL = feed.linkFile
     c = feedparser.parse(URL)
     numLinks = min(5, len(c.entries))
     i = 0
     while i < numLinks:
-      print(i)
+      logging.debug(i)
       title = c.entries[i].title
-      print(title)
+      logging.debug(title)
       link = c.entries[i].link
-      print(link)
+      logging.debug(link)
       linkId = hashlib.md5(c.entries[i].id.encode()).hexdigest()
-      print(linkId)
+      logging.debug(linkId)
       newLink = False
       try:
         l = Link.objects.get(linkId = linkId)
@@ -36,7 +47,7 @@ def output():
         l = Link(parentFeed = feed, linkId=linkId)
         l.save()
         newLink = True
-      print(newLink)
+      logging.debug(newLink)
       if newLink:
         mdown = "[" + title + "](" + link + ")"
         api.messages.create(roomId=ROOM_ID, markdown=mdown)
