@@ -28,11 +28,13 @@ def output():
   logging.debug('Found ' + str(myFeeds.count()) + ' feeds...')
   for feed in myFeeds:
     URL = feed.linkFile
+    logging.debug('Found this URL: ' + str(URL))
     c = feedparser.parse(URL)
     numLinks = min(5, len(c.entries))
+    logging.debug('Will go through ' + str(numLinks) + ' entries')
     i = 0
     while i < numLinks:
-      logging.debug(i)
+      logging.debug('-----Iteration ' + str(i) + ' -----')
       title = c.entries[i].title
       logging.debug(title)
       link = c.entries[i].link
